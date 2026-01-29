@@ -186,22 +186,57 @@
 
 <main id="inicio" class="max-w-7xl mx-auto px-6 py-10">
 
-    <!-- HERO -->
+    <!-- Hero-->
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10">
+
+        <!-- VIDEO -->
         <div class="lg:col-span-8">
-            <div class="relative overflow-hidden rounded-2xl aspect-video lg:h-[450px] shadow-2xl glass-card">
-                <iframe class="absolute inset-0 w-full h-full" src="https://player.kick.com/futuratv913"></iframe>
+            <div class="relative overflow-hidden rounded-2xl shadow-2xl glass-card
+                    h-[240px] sm:h-[360px] lg:h-[460px]">
+                <iframe
+                        class="absolute inset-0 w-full h-full"
+                        src="https://player.kick.com/futuratv913"
+                        allowfullscreen>
+                </iframe>
             </div>
         </div>
 
-        <!-- CARD STREAMING (CTA) -->
-        <div class="lg:col-span-4 space-y-6">
-            <div class="glass-card p-8 rounded-2xl h-full flex flex-col justify-between relative overflow-hidden">
-                <iframe class="absolute inset-0 w-full h-full" src="https://kick.com/futuratv913/chatroom"
-                        style="border: none;"></iframe>
+        <!-- CHAT -->
+        <div class="lg:col-span-4">
+            <div class="glass-card rounded-2xl overflow-hidden border border-white/10
+                    h-[240px] sm:h-[360px] lg:h-[460px]
+                    flex flex-col">
+
+                <!-- Header fijo -->
+                <div class="px-4 py-3 flex items-center justify-between
+                        border-b border-white/10 shrink-0">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">chat</span>
+                        <span class="font-bold">Chat</span>
+                    </div>
+                    <span class="text-[10px] font-black tracking-widest text-red-400 uppercase">
+                    Live
+                </span>
+                </div>
+
+                <!-- Iframe ocupa TODO el resto -->
+                <div class="relative flex-1">
+                    <iframe
+                            class="absolute inset-0 w-full h-full"
+                            src="https://kick.com/futuratv913/chatroom"
+                            style="border:none;"
+                            loading="lazy"
+                            referrerpolicy="no-referrer"
+                            allow="autoplay; fullscreen; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                </div>
+
             </div>
         </div>
+
     </section>
+
 
     <!-- EN VIVO -->
     <section id="en-vivo" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-14">
@@ -491,8 +526,7 @@
         else if (h >= 17 && h < 19) p = "Bumper 2 Bumper";
         else if (h >= 19 && h < 21) p = "El Bello y la Bestia";
         else if (h >= 21) p = "El Desvelo";
-
-
+        
         const textoPrograma = `AL AIRE AHORA 🔴<span class="dorado font-bold">${p}</span>`;
 
         const programaActualEl = document.getElementById("programaActual");
@@ -509,9 +543,7 @@
         if (programaBadgeEl) {
             programaBadgeEl.innerHTML = textoPrograma;
         }
-
-
-        // 3) Resaltar programación actual
+        
         const list = document.getElementById("programList");
         const items = document.querySelectorAll(".program-item[data-programa]");
         if (!items.length) return;
@@ -520,47 +552,37 @@
 
         items.forEach(item => {
             const isActive = item.getAttribute("data-programa") === p;
-
-            // Reset visual
+            
             item.classList.remove(
                 "bg-primary/15", "border-primary/40", "ring-1", "ring-primary/30"
             );
             item.classList.add("border-transparent");
-
-            // Quitar badge si ya existía
+            
             const oldBadge = item.querySelector(".badge-en-directo");
             if (oldBadge) oldBadge.remove();
 
             if (isActive) {
                 activeItem = item;
-
-                // Activo (más evidente)
+                
                 item.classList.add("bg-primary/15", "border-primary/40", "ring-1", "ring-primary/30");
                 item.classList.remove("border-transparent");
-
-                // Badge
+                
                 const title = item.querySelector("h5");
                 if (title) {
                     const badge = document.createElement("span");
                     badge.className = `
-  badge-en-directo ml-3 inline-flex items-center gap-1
-  rounded-full bg-red-600/20 text-red-500
-  text-[10px] font-black px-2 py-0.5
-  tracking-tight uppercase
-  ring-1 ring-red-500/40
-`;
-                    badge.innerHTML = `
-  <span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
-  En Directo
-`;
-
-
+                                          badge-en-directo ml-3 inline-flex items-center gap-1
+                                          rounded-full bg-red-600/20 text-red-500
+                                          text-[10px] font-black px-2 py-0.5
+                                          tracking-tight uppercase
+                                          ring-1 ring-red-500/40`;
+                    badge.innerHTML = `<span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>En Directo`;
+                    
                     title.appendChild(badge);
                 }
             }
         });
-
-        // 4) Scroll SOLO dentro del panel (no mover la página)
+        
         if (activeItem && list) {
             const listRect = list.getBoundingClientRect();
             const itemRect = activeItem.getBoundingClientRect();
@@ -569,7 +591,7 @@
             const isBelow = itemRect.bottom > listRect.bottom;
 
             if (isAbove || isBelow) {
-                const offsetTop = activeItem.offsetTop; // relativo al contenedor scroll
+                const offsetTop = activeItem.offsetTop;
                 const target = offsetTop - (list.clientHeight / 2) + (activeItem.clientHeight / 2);
                 list.scrollTo({top: Math.max(0, target), behavior: "smooth"});
             }
